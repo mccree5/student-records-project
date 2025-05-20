@@ -72,6 +72,33 @@ backup_database() {
     echo "✅ Backup complete. The backup is saved as student_db_backup_$(date +"%Y%m%d_%H%M%S").sql in the backup folder."
 }
 
+custom_query() {
+    while true; do
+        echo "Enter your SQL query (end with a semicolon), or type 'exit' to quit:"
+        read sql_query
+        
+        
+        if [ "$sql_query" == "exit" ]; then
+            echo "Exiting custom query mode."
+            break
+        fi
+        
+        # Check if the query is empty
+        if [ -z "$sql_query" ]; then
+            echo "❌ Query cannot be empty."
+            continue
+        fi
+
+        echo "Executing your query..."
+        
+        # Execute the query
+        sudo -u postgres psql -d "$db_name" -c "$sql_query"
+        
+        echo "----------------------------"
+    done
+}
+
+
 
 # ------------------ Menu Loop ------------------ #
 while true; do
@@ -84,9 +111,10 @@ while true; do
     echo "3. Query Students"
     echo "4. Insert New Student"
     echo "5. Backup Database"
-    echo "6. Exit"
+    echo "6. Custom Query"
+    echo "7. Exit"
     echo "-------------------------------"
-    read -p "Select an option (1-6): " choice
+    read -p "Select an option (1-7): " choice
 
     case $choice in
         1) setup_database ;;
@@ -94,7 +122,8 @@ while true; do
         3) query_students ;;
         4) insert_students ;;
         5) backup_database ;;
-        6) echo "👋 Exiting. Goodbye!" && exit 0 ;;
+        6) custom_query ;;
+        7) echo "👋 Exiting" && exit 0 ;;
         *) echo "❌ Invalid option. Please enter a number from 1 to 6." ;;
     esac
 done

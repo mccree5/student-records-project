@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS event_participation (
     event_id INT REFERENCES events(event_id),
     PRIMARY KEY (student_id, event_id)
 );
--- Optional: Creating an index to speed up searching by name or major (if needed)
+
 -- CREATE INDEX idx_name ON students (name);
 -- CREATE INDEX idx_major ON students (major);
 
